@@ -59,35 +59,79 @@ if (document.getElementById('addVideoForm')) {
 }
 
 // Download-Verwaltung
-function loadDownloads() {
-	const downloads = JSON.parse(localStorage.getItem('downloads') || '[]');
-	const list = document.getElementById('downloadList');
-	list.innerHTML = '';
-	downloads.forEach((d, i) => {
-		const li = document.createElement('li');
-		li.innerHTML = `<b>${d.title}</b> <a href="${d.url}" target="_blank">Download</a> <button onclick="deleteDownload(${i})">🗑️</button>`;
-		list.appendChild(li);
-	});
+// Firebase-Konfiguration (ersetzen mit deinen Daten!)
+const firebaseConfig = {
+	apiKey: "AIzaSyCIvIpODOa5cTA-6VSE9yXRDdH8CdIoKr8",
+  	authDomain: "qfvjug-2fc91.firebaseapp.com",
+  	databaseURL: "https://qfvjug-2fc91-default-rtdb.europe-west1.firebasedatabase.app",
+  	projectId: "qfvjug-2fc91",
+  	storageBucket: "qfvjug-2fc91.firebasestorage.app",
+  	messagingSenderId: "99637805559",
+  	appId: "1:99637805559:web:894394bd3c050ed1966ef2",
+};
+
+// Firebase initialisieren
+if (typeof firebase === 'undefined') {
+	const script = document.createElement('script');
+	script.src = "https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js";
+	script.onload = () => {
+		const dbScript = document.createElement('script');
+		dbScript.src = "https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js";
+		dbScript.onload = () => {
+			window.initFirebaseDownloads && window.initFirebaseDownloads();
+		};
+		document.head.appendChild(dbScript);
+	};
+	document.head.appendChild(script);
+} else {
+	window.initFirebaseDownloads && window.initFirebaseDownloads();
 }
-function addDownload(e) {
-	e.preventDefault();
-	const title = document.getElementById('downloadTitle').value;
-	const url = document.getElementById('downloadUrl').value;
-	const downloads = JSON.parse(localStorage.getItem('downloads') || '[]');
-	downloads.push({title, url});
-	localStorage.setItem('downloads', JSON.stringify(downloads));
-	loadDownloads();
-	e.target.reset();
-}
-function deleteDownload(idx) {
-	const downloads = JSON.parse(localStorage.getItem('downloads') || '[]');
-	downloads.splice(idx, 1);
-	localStorage.setItem('downloads', JSON.stringify(downloads));
-	loadDownloads();
-}
-if (document.getElementById('addDownloadForm')) {
-	document.getElementById('addDownloadForm').onsubmit = addDownload;
-	loadDownloads();
+
+window.initFirebaseDownloads = function() {
+	firebase.initializeApp(firebaseConfig);
+	const db = firebase.database();
+
+	function loadDownloads() {
+		const list = document.getElementById('downloadList');
+		list.innerHTML = '<li>Lädt...</li>';
+		db.ref('downloads').once('value', snap => {
+			const downloads = snap.val() || [];
+			list.innerHTML = '';
+			downloads.forEach((d, i) => {
+				const li = document.createElement('li');
+				li.innerHTML = `<b>${d.title}</b> <a href="${d.url}" target="_blank">Download</a> <button onclick="deleteDownload(${i})">🗑️</button>`;
+				list.appendChild(li);
+			});
+		});
+	}
+	window.loadDownloads = loadDownloads;
+
+	function addDownload(e) {
+		e.preventDefault();
+		const title = document.getElementById('downloadTitle').value;
+		const url = document.getElementById('downloadUrl').value;
+		db.ref('downloads').once('value', snap => {
+			const downloads = snap.val() || [];
+			downloads.push({title, url});
+			db.ref('downloads').set(downloads, loadDownloads);
+		});
+		e.target.reset();
+	}
+	window.addDownload = addDownload;
+
+	function deleteDownload(idx) {
+		db.ref('downloads').once('value', snap => {
+			const downloads = snap.val() || [];
+			downloads.splice(idx, 1);
+			db.ref('downloads').set(downloads, loadDownloads);
+		});
+	}
+	window.deleteDownload = deleteDownload;
+
+	if (document.getElementById('addDownloadForm')) {
+		document.getElementById('addDownloadForm').onsubmit = addDownload;
+		loadDownloads();
+	}
 }
 
 // Benachrichtigungen
