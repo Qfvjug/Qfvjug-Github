@@ -1,0 +1,114 @@
+body {
+    font-family: Arial, sans-serif;
+    background: var(--bg, #181818);
+    color: var(--fg, #f5f5f5);
+    margin: 0;
+    padding: 0;
+    transition: background 0.5s, color 0.5s;
+}
+header {
+    background: var(--header-bg, #222);
+    padding: 1em;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+nav a {
+    color: var(--nav-color, #00bfff);
+    margin: 0 0.5em;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5em 1em;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,191,255,0.08);
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    position: relative;
+}
+nav a:hover {
+    background: var(--nav-hover-bg, #333);
+    text-decoration: underline;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(0,191,255,0.15);
+}
+.nav-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 0.5em;
+    vertical-align: middle;
+    filter: drop-shadow(0 0 2px #00bfff);
+    transition: filter 0.2s;
+}
+main {
+    padding: 2em;
+    min-height: 80vh;
+}
+section {
+    margin-bottom: 2em;
+    background: var(--section-bg, #242424);
+    padding: 1em;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    transition: background 0.5s;
+}
+footer {
+    background: var(--footer-bg, #222);
+    text-align: center;
+    padding: 1em;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.2);
+    transition: background 0.5s;
+}
+
+/* Aktiver Navigationslink */
+.main-nav a.active {
+    background: linear-gradient(90deg, #00bfff 0%, #0055ff 100%);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(0,191,255,0.25);
+}
+
+/* Dark-/Light-Mode Toggle Button */
+.mode-toggle {
+    position: absolute;
+    top: 1em;
+    right: 2em;
+    background: #333;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    font-size: 1.2em;
+    transition: background 0.3s, color 0.3s;
+    z-index: 10;
+}
+.mode-toggle.light {
+    background: #eee;
+    color: #222;
+}
+
+/* Responsive Navigation */
+@media (max-width: 700px) {
+    nav.main-nav {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5em;
+    }
+    nav a {
+        width: 90vw;
+        justify-content: center;
+        margin: 0.2em 0;
+    }
+    .mode-toggle {
+        right: 1em;
+        top: 0.5em;
+    }
+    main {
+        padding: 1em;
+    }
+}
