@@ -29,20 +29,29 @@
             <div class="admin-cards">
                 <div class="admin-card">
                     <h3>Videos verwalten</h3>
-                    <button>Video hinzufügen</button>
-                    <button>Video bearbeiten</button>
-                    <button>Video löschen</button>
+                    <form id="addVideoForm">
+                        <input type="text" id="videoTitle" placeholder="Titel" required>
+                        <input type="text" id="videoUrl" placeholder="YouTube-Link" required>
+                        <button type="submit">Hinzufügen</button>
+                    </form>
+                    <ul id="videoList"></ul>
                 </div>
                 <div class="admin-card">
                     <h3>Downloads verwalten</h3>
-                    <button>Download hinzufügen</button>
-                    <button>Download bearbeiten</button>
-                    <button>Download löschen</button>
+                    <form id="addDownloadForm">
+                        <input type="text" id="downloadTitle" placeholder="Name" required>
+                        <input type="text" id="downloadUrl" placeholder="Download-Link" required>
+                        <button type="submit">Hinzufügen</button>
+                    </form>
+                    <ul id="downloadList"></ul>
                 </div>
                 <div class="admin-card">
                     <h3>Benachrichtigungen</h3>
-                    <button>Benachrichtigung verschicken</button>
-                    <button>Historie ansehen</button>
+                    <form id="notifyForm">
+                        <input type="text" id="notifyMsg" placeholder="Nachricht" required>
+                        <button type="submit">Senden</button>
+                    </form>
+                    <ul id="notifyHistory"></ul>
                 </div>
             </div>
         </section>
